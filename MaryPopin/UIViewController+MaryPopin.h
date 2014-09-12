@@ -23,10 +23,30 @@
 
 #import <UIKit/UIKit.h>
 
-@interface BkBlurryParameters : NSObject
+FOUNDATION_EXPORT NSString * const kMaryPopinDismissNotification;
+
+/**
+ * Object to customize blurry background
+ */
+@interface BKTBlurParameters : NSObject
+/**
+ *  Property to customize background view alpha.
+ */
 @property (assign, nonatomic) CGFloat alpha;
+/**
+ *  Property to customize background view blur radius.
+ */
 @property (assign, nonatomic) CGFloat radius;
+/**
+ *  Property to customize background view blur saturation factor.
+ *  A value of 1.0 is neutral. Below it is desaturated and above it is more saturated.
+ */
 @property (assign, nonatomic) CGFloat saturationDeltaFactor;
+/**
+ *  Property to customize blur tint color. Default is clear color.
+ */
+@property (strong, nonatomic) UIColor *tintColor;
+
 @end
 
 /**
@@ -110,6 +130,10 @@ typedef NS_OPTIONS(NSUInteger, BKTPopinOption) {
      */
     BKTPopinBlurryDimmingView = 1 << 2,
     /**
+     *  Disable parallax effect on iOS7
+     */
+    BKTPopinDisableParallaxEffect = 1 << 3,
+    /**
      *  Set a background dimming view with a clear color. Default is a semi-transparent black background
      */
     BKTPopinDimmingViewStyleNone = 1 << 16,
@@ -120,27 +144,27 @@ typedef NS_OPTIONS(NSUInteger, BKTPopinOption) {
  *  @see -popinAlignement
  *  @since v1.3
  */
-typedef NS_ENUM(NSInteger, BKTPopinAlignmentOption) {
+typedef NS_ENUM(NSInteger, BKTPopinAlignementOption) {
     /**
      *  Popin will be centered in container
      */
-    BKTPopinAlignmentOptionCentered = 0,
+    BKTPopinAlignementOptionCentered = 0,
     /**
      *  Popin will be stuck to top in container
      */
-    BKTPopinAlignmentOptionUp       = 1,
+    BKTPopinAlignementOptionUp       = 1,
     /**
      *  Popin will be left-aligned in container
      */
-    BKTPopinAlignmentOptionLeft     = 2,
+    BKTPopinAlignementOptionLeft     = 2,
     /**
      *  Default will be stuck to bottom in container
      */
-    BKTPopinAlignmentOptionDown     = 3,
+    BKTPopinAlignementOptionDown     = 3,
     /**
      *  Popin will be right-aligned in container
      */
-    BKTPopinAlignmentOptionRight    = 4
+    BKTPopinAlignementOptionRight    = 4
 };
 
 /**
@@ -323,23 +347,37 @@ typedef NS_ENUM(NSInteger, BKTPopinAlignmentOption) {
 - (void)setPopinCustomOutAnimation:(void (^)(UIViewController * popinController,CGRect initialFrame,CGRect finalFrame))customOutAnimation;
 
 /**
- *  The options to apply to the popin. Default value is `BKTPopinAlignmentOptionCentered`.
+ *  The options to apply to the popin. Default value is `BKTPopinAlignementOptionCentered`.
  *
- *  @return The BKTPopinAlignmentOption values as a bit field.
+ *  @return The BKTPopinAlignementOption values as a bit field.
  *  @see -setPopinAlignement:
  *  @since v1.3
  */
-- (BKTPopinAlignmentOption)popinAlignment;
+- (BKTPopinAlignementOption)popinAlignment;
 
 /**
  *  The options to apply to the popin. For a list of possible options, see BKTPopinAlignementOption
  *
- *  @param popinAlignement The BKTPopinAlignmentOption values separated by | character.
+ *  @param popinAlignement The BKTPopinAlignementOption values separated by | character.
  *  @since v1.3
  */
-- (void)setPopinAlignment:(BKTPopinAlignmentOption)popinAlignment;
+- (void)setPopinAlignment:(BKTPopinAlignementOption)popinAlignment;
 
-- (BkBlurryParameters *)blurryParameters;
-- (void)setBlurryParameters:(BkBlurryParameters *)blurryParameters;
+/**
+ *  An object used to configure the blurred background.
+ *
+ *  @return The blur parameters object.
+ *  @see -setBlurParameters:
+ *  @since v1.4
+ */
+- (BKTBlurParameters *)blurParameters;
+
+/**
+ *  An object used to configure the blurred background.
+ *
+ *  @param blurParameters The blur parameters object.
+ *  @sicne v1.4
+ */
+- (void)setBlurParameters:(BKTBlurParameters *)blurParameters;
 
 @end
