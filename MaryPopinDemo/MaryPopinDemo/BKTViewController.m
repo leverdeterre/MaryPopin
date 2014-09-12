@@ -41,6 +41,7 @@
 {
     [super viewDidLoad];
     self.selectedAlignementOption = 0;
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(receiveNotification:) name:kMaryPopinDismissNotification object:nil];
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -49,7 +50,8 @@
     [self.tableView selectRowAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:0] animated:NO scrollPosition:UITableViewScrollPositionNone];
 }
 
-- (IBAction)presentPopinPressed:(id)sender {
+- (IBAction)presentPopinPressed:(id)sender
+{
     NSIndexPath *selectedIndexPath = [self.tableView indexPathForSelectedRow];
     BKTPopinControllerViewController *popin = [[BKTPopinControllerViewController alloc] init];
     [popin setPopinTransitionStyle:[self transitionStyleForIndexPath:selectedIndexPath]];
@@ -62,14 +64,16 @@
     //Set popin alignement according to value in segmented control
     [popin setPopinAlignment:self.selectedAlignementOption];
     
+    //Create a blur parameters object to configure background blur
+    BKTBlurParameters *blurParameters = [BKTBlurParameters new];
+    blurParameters.alpha = 1.0f;
+    blurParameters.radius = 8.0f;
+    blurParameters.saturationDeltaFactor = 1.8f;
+    blurParameters.tintColor = [UIColor colorWithRed:0.966 green:0.851 blue:0.038 alpha:0.2];
+    [popin setBlurParameters:blurParameters];
+    
     //Add option for a blurry background
     [popin setPopinOptions:[popin popinOptions]|BKTPopinBlurryDimmingView];
-    
-    BkBlurryParameters *blurrayParameters = [BkBlurryParameters new];
-    blurrayParameters.alpha = 0.7f;
-    blurrayParameters.radius = 18.0f;
-    blurrayParameters.saturationDeltaFactor = 2.0f;
-    [popin setBlurryParameters:blurrayParameters];
     
     //Define a custom transition style
     if (popin.popinTransitionStyle == BKTPopinTransitionStyleCustom)
@@ -114,6 +118,11 @@
 - (IBAction)segmentedControlChange:(UISegmentedControl *)sender
 {
     self.selectedAlignementOption = sender.selectedSegmentIndex;
+}
+
+- (void)receiveNotification:(NSNotification *)notif
+{
+    NSLog(@"%s %@",__FUNCTION__,[notif name]);
 }
 
 @end
