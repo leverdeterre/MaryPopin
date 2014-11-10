@@ -22,30 +22,7 @@
 // THE SOFTWARE.
 
 #import <UIKit/UIKit.h>
-
-/**
- * Object to customize blurry background
- */
-@interface BKTBlurParameters : NSObject
-/**
- *  Property to customize background view alpha.
- */
-@property (assign, nonatomic) CGFloat alpha;
-/**
- *  Property to customize background view blur radius.
- */
-@property (assign, nonatomic) CGFloat radius;
-/**
- *  Property to customize background view blur saturation factor.
- *  A value of 1.0 is neutral. Below it is desaturated and above it is more saturated.
- */
-@property (assign, nonatomic) CGFloat saturationDeltaFactor;
-/**
- *  Property to customize blur tint color. Default is clear color.
- */
-@property (strong, nonatomic) UIColor *tintColor;
-
-@end
+#import "BKTBlurParameters.h"
 
 /**
  *  Transition styles available when presenting popin view controllers.
